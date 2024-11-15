@@ -25,10 +25,15 @@ public class DriveSubsystem {
         imu.initialize(parameters);
     }
 
+    public void forward() {
+
+    }
+
     public void driveRobotCentric(double x, double y, double rx) {
         x *= 1.1;
 
-        double denominator = Math.max(Math.abs(y) + Math.abs(x) + Math.abs(rx), 1);
+//        double denominator = Math.max(Math.abs(y) + Math.abs(x) + Math.abs(rx), 1);
+        double denominator = 1;
         double frontLeftPower = (y + x + rx) / denominator;
         double backLeftPower = (y - x + rx) / denominator;
         double frontRightPower = (y - x - rx) / denominator;
@@ -45,8 +50,6 @@ public class DriveSubsystem {
 
         double rotX = x * Math.cos(-botHeading) - y * Math.sin(-botHeading);
         double rotY = x * Math.sin(-botHeading) + y * Math.cos(-botHeading);
-
-        rotX = rotX * 1.1;
 
         driveRobotCentric(rotX, rotY, rx);
     }

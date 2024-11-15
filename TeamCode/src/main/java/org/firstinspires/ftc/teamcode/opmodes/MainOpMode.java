@@ -35,7 +35,7 @@ public class MainOpMode extends LinearOpMode {
             elevatorTelemetry();
 
 //            grabberControls();
-//            grabberManual();
+            grabberManual();
             grabberTelemetry();
 
             telemetry.update();
@@ -78,7 +78,7 @@ public class MainOpMode extends LinearOpMode {
     private void elevatorManual() {
         if(elevatorSubsystem == null) return;
 
-        elevatorSubsystem.setSpeed(gamepad2.left_stick_y * Constants.ElevatorConstants.MAX_MOTOR_SPEED);
+        elevatorSubsystem.setSpeed(-gamepad2.left_stick_y * Constants.ElevatorConstants.MAX_MOTOR_SPEED);
     }
 
     private void elevatorTelemetry() {
@@ -112,6 +112,8 @@ public class MainOpMode extends LinearOpMode {
             grabberSubsystem.setAngle(grabberSubsystem.getAngle() - 0.1);
             sleep(50);
         }
+
+        grabberSubsystem.setExtendPower(-gamepad2.right_stick_y * Constants.GrabberConstants.MAX_EXTEND_SPEED);
     }
 
     private void grabberTelemetry() {
