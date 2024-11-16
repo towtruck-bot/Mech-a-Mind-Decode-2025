@@ -30,8 +30,8 @@ public class MainOpMode extends LinearOpMode {
             driveControls();
             driveTelemetry();
 
-//            elevatorControls();
-            elevatorManual();
+            elevatorControls();
+//            elevatorManual();
             elevatorTelemetry();
 
 //            grabberControls();
@@ -66,11 +66,17 @@ public class MainOpMode extends LinearOpMode {
     private void elevatorControls() {
         if(elevatorSubsystem == null) return;
 
-        if(-gamepad2.left_stick_y > 0.1) {
-            elevatorSubsystem.setExtension(Constants.ElevatorConstants.ELEVATOR_LEVELS[2]);
-        } else if(-gamepad2.left_stick_y < 0.1) {
-            elevatorSubsystem.setExtension(0);
+        boolean override = gamepad2.left_bumper;
+
+        double speed = -gamepad2.left_stick_y * Constants.ElevatorConstants.MAX_MOTOR_SPEED;
+
+        if(speed > 0 && elevatorSubsystem.getPosition() > 3000 && !override) {
+            speed = 0;
+        } else if(speed < 0 && elevatorSubsystem.getPosition() <= 0 && !override) {
+            speed = 0;
         }
+
+        elevatorSubsystem.setSpeed(speed);
     }
 
     private void elevatorManual() {
@@ -96,18 +102,18 @@ public class MainOpMode extends LinearOpMode {
         if(grabberSubsystem == null) return;
 
         if(gamepad2.dpad_up) {
-            grabberSubsystem.setGrabberPosition(grabberSubsystem.getGrabberPosition() + 0.05);
+            grabberSubsystem.setAngle(grabberSubsystem.getGrabberPosition() + 0.1);
             sleep(100);
         } else if(gamepad2.dpad_down) {
-            grabberSubsystem.setGrabberPosition(grabberSubsystem.getGrabberPosition() - 0.05);
+            grabberSubsystem.setAngle(grabberSubsystem.getGrabberPosition() - 0.1);
             sleep(100);
         }
 
         if(gamepad2.triangle) {
-            grabberSubsystem.setAngle(grabberSubsystem.getAngle() + 0.05);
+            grabberSubsystem.setGrabberPosition(0.7);
             sleep(100);
-        } else if(gamepad2.x) {
-            grabberSubsystem.setAngle(grabberSubsystem.getAngle() - 0.05);
+        } else if(gamepad2.square) {
+            grabberSubsystem.setGrabberPosition(0.35);
             sleep(100);
         }
 
