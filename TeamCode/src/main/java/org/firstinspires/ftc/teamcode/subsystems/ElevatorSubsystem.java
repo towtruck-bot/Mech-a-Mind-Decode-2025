@@ -17,8 +17,8 @@ public class ElevatorSubsystem {
         rightMotor = hmap.get(DcMotor.class, ElevatorConstants.RIGHT_MOTOR_ID);
         centerMotor = hmap.get(DcMotor.class, ElevatorConstants.CENTER_MOTOR_ID);
 
-        leftMotor.setDirection(DcMotorSimple.Direction.FORWARD);
-        rightMotor.setDirection(DcMotorSimple.Direction.REVERSE);
+        leftMotor.setDirection(DcMotorSimple.Direction.REVERSE);
+        rightMotor.setDirection(DcMotorSimple.Direction.FORWARD);
         centerMotor.setDirection(DcMotorSimple.Direction.REVERSE);
     }
 
