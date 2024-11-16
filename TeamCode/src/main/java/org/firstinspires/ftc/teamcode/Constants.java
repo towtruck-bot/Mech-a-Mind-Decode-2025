@@ -14,5 +14,9 @@ public class Constants {
 
         public static final int[] ELEVATOR_LEVELS = {100, 1200, 2400};
 
+        public static final String CENTER_MOTOR_ID = "CenterElevatorMotor";
+    }
+    public static final class GrabberConstants {
+        public static final double MAX_EXTEND_SPEED = 0.8;
     }
 }

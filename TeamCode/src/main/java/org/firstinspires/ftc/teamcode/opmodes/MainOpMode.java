@@ -35,7 +35,7 @@ public class MainOpMode extends LinearOpMode {
             elevatorTelemetry();
 
 //            grabberControls();
-//            grabberManual();
+            grabberManual();
             grabberTelemetry();
 
             telemetry.update();
@@ -49,7 +49,7 @@ public class MainOpMode extends LinearOpMode {
         double y = -gamepad1.left_stick_y;
         double rx = gamepad1.right_stick_x;
 
-        driveSubsystem.driveFieldCentric(x, y, rx);
+        driveSubsystem.driveRobotCentric(x, y, rx);
 
         if(gamepad1.options) {
             driveSubsystem.resetHeading();
@@ -66,19 +66,17 @@ public class MainOpMode extends LinearOpMode {
     private void elevatorControls() {
         if(elevatorSubsystem == null) return;
 
-        if(gamepad2.dpad_up && currentElevatorLevel < Constants.ElevatorConstants.ELEVATOR_LEVELS.length-1) {
-            currentElevatorLevel++;
-        } else if(gamepad2.dpad_down && currentElevatorLevel > 0) {
-            currentElevatorLevel--;
+        if(-gamepad2.left_stick_y > 0.1) {
+            elevatorSubsystem.setExtension(Constants.ElevatorConstants.ELEVATOR_LEVELS[2]);
+        } else if(-gamepad2.left_stick_y < 0.1) {
+            elevatorSubsystem.setExtension(0);
         }
-
-        elevatorSubsystem.setExtension(Constants.ElevatorConstants.ELEVATOR_LEVELS[currentElevatorLevel]);
     }
 
     private void elevatorManual() {
         if(elevatorSubsystem == null) return;
 
-        elevatorSubsystem.setSpeed(gamepad2.left_stick_y * Constants.ElevatorConstants.MAX_MOTOR_SPEED);
+        elevatorSubsystem.setSpeed(-gamepad2.left_stick_y * Constants.ElevatorConstants.MAX_MOTOR_SPEED);
     }
 
     private void elevatorTelemetry() {
@@ -98,20 +96,22 @@ public class MainOpMode extends LinearOpMode {
         if(grabberSubsystem == null) return;
 
         if(gamepad2.dpad_up) {
-            grabberSubsystem.setGrabberPosition(grabberSubsystem.getGrabberPosition() + 0.1);
-            sleep(50);
+            grabberSubsystem.setGrabberPosition(grabberSubsystem.getGrabberPosition() + 0.05);
+            sleep(100);
         } else if(gamepad2.dpad_down) {
-            grabberSubsystem.setGrabberPosition(grabberSubsystem.getGrabberPosition() - 0.1);
-            sleep(50);
+            grabberSubsystem.setGrabberPosition(grabberSubsystem.getGrabberPosition() - 0.05);
+            sleep(100);
         }
 
         if(gamepad2.triangle) {
-            grabberSubsystem.setAngle(grabberSubsystem.getAngle() + 0.1);
-            sleep(50);
+            grabberSubsystem.setAngle(grabberSubsystem.getAngle() + 0.05);
+            sleep(100);
         } else if(gamepad2.x) {
-            grabberSubsystem.setAngle(grabberSubsystem.getAngle() - 0.1);
-            sleep(50);
+            grabberSubsystem.setAngle(grabberSubsystem.getAngle() - 0.05);
+            sleep(100);
         }
+
+        grabberSubsystem.setExtendPower(-gamepad2.right_stick_y * Constants.GrabberConstants.MAX_EXTEND_SPEED);
     }
 
     private void grabberTelemetry() {
