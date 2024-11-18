@@ -45,9 +45,9 @@ public class MainOpMode extends LinearOpMode {
     private void driveControls() {
         if(driveSubsystem == null) return;
 
-        double x = gamepad1.left_stick_x;
-        double y = -gamepad1.left_stick_y;
-        double rx = gamepad1.right_stick_x;
+        double x = gamepad1.left_stick_x * 0.5;
+        double y = -gamepad1.left_stick_y * 0.5;
+        double rx = gamepad1.right_stick_x * 0.50;
 
         driveSubsystem.driveRobotCentric(x, y, rx);
 
@@ -102,10 +102,10 @@ public class MainOpMode extends LinearOpMode {
         if(grabberSubsystem == null) return;
 
         if(gamepad2.dpad_up) {
-            grabberSubsystem.setAngle(grabberSubsystem.getGrabberPosition() + 0.1);
+            grabberSubsystem.setAngle(grabberSubsystem.getAngle() + 0.05);
             sleep(100);
         } else if(gamepad2.dpad_down) {
-            grabberSubsystem.setAngle(grabberSubsystem.getGrabberPosition() - 0.1);
+            grabberSubsystem.setAngle(grabberSubsystem.getAngle() - 0.05);
             sleep(100);
         }
 

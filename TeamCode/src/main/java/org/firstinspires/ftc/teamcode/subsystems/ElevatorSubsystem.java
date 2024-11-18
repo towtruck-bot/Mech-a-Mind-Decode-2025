@@ -54,11 +54,25 @@ public class ElevatorSubsystem {
         centerMotor.setPower(ElevatorConstants.MAX_MOTOR_SPEED);
     }
 
+    public void setAutoExtension(int extension) {
+        setExtension(extension);
+
+        while(leftMotor.isBusy() && rightMotor.isBusy()) {}
+
+        stop();
+    }
+
     public boolean atSetpoint() {
         return Math.abs(getPosition() - setpoint) < ElevatorConstants.kSetpointTolerance;
     }
 
     public int getPosition() {
         return leftMotor.getCurrentPosition();
+    }
+
+    public void stop() {
+        leftMotor.setPower(0);
+        rightMotor.setPower(0);
+        centerMotor.setPower(0);
     }
 }

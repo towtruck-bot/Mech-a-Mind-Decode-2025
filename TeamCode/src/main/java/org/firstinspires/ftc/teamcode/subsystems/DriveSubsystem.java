@@ -2,6 +2,7 @@ package org.firstinspires.ftc.teamcode.subsystems;
 
 import com.qualcomm.hardware.rev.RevHubOrientationOnRobot;
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.IMU;
 
@@ -16,6 +17,9 @@ public class DriveSubsystem {
         frontRightMotor = hmap.get(DcMotor.class, "frontRightDrive");
         backLeftMotor = hmap.get(DcMotor.class, "backLeftDrive");
         backRightMotor = hmap.get(DcMotor.class, "backRightDrive");
+
+        frontLeftMotor.setDirection(DcMotorSimple.Direction.REVERSE);
+        backLeftMotor.setDirection(DcMotorSimple.Direction.REVERSE);
 
         imu = hmap.get(IMU.class, "imu");
 
@@ -55,6 +59,13 @@ public class DriveSubsystem {
 
     public void resetHeading() {
         imu.resetYaw();
+    }
+
+    public void stop() {
+        frontLeftMotor.setPower(0);
+        backLeftMotor.setPower(0);
+        frontRightMotor.setPower(0);
+        backRightMotor.setPower(0);
     }
 
 }
