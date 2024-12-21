@@ -47,9 +47,9 @@ public class MainOpMode extends LinearOpMode {
     private void driveControls() {
         if(driveSubsystem == null) return;
 
-        double x = Constants.DriveConstants.DRIVE_SPEED * Math.signum(gamepad1.left_stick_x) * Math.pow(Math.abs(gamepad1.left_stick_x), 2);
-        double y = Constants.DriveConstants.DRIVE_SPEED * Math.signum(-gamepad1.left_stick_y) * Math.pow(Math.abs(gamepad1.left_stick_y), 2);
-        double rx = Constants.DriveConstants.DRIVE_SPEED * Math.signum(gamepad1.right_stick_x) * Math.pow(Math.abs(gamepad1.right_stick_x), 2);
+        double x = Constants.DriveConstants.DRIVE_SPEED * Math.signum(gamepad1.left_stick_x) * Math.pow(Math.abs(gamepad1.left_stick_x), Constants.DriveConstants.DRIVE_SENSITIVITY);
+        double y = Constants.DriveConstants.DRIVE_SPEED * Math.signum(-gamepad1.left_stick_y) * Math.pow(Math.abs(gamepad1.left_stick_y), Constants.DriveConstants.DRIVE_SENSITIVITY);
+        double rx = Constants.DriveConstants.DRIVE_SPEED * Math.signum(gamepad1.right_stick_x) * Math.pow(Math.abs(gamepad1.right_stick_x), Constants.DriveConstants.DRIVE_SENSITIVITY);
 
         driveSubsystem.driveRobotCentric(x, y, rx);
 

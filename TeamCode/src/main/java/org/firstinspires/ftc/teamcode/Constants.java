@@ -38,5 +38,6 @@ public class Constants {
 
     public static final class DriveConstants {
         public static final double DRIVE_SPEED = 1;
+        public static final double DRIVE_SENSITIVITY = 2;
     }
 }
