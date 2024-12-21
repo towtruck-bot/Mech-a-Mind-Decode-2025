@@ -1,6 +1,6 @@
 package org.firstinspires.ftc.teamcode.opmodes;
 
-import com.qualcomm.robotcore.eventloop.opmode.Autonomous;`
+import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
 import org.firstinspires.ftc.teamcode.subsystems.DriveSubsystem;
@@ -25,7 +25,7 @@ public class BottomSpecAutoOpMode extends LinearOpMode {
         elevatorSubsystem.setAutoExtension(2000);
         sleep(200);
 
-        grabberSubsystem.setAngle(0.5);
+//        grabberSubsystem.setAngle(0.5); // update later
         sleep(500);
 
         driveSubsystem.driveRobotCentric(0, 0.25, 0);

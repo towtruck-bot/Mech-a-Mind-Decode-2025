@@ -26,6 +26,8 @@ public class MainOpMode extends LinearOpMode {
 
         if(isStopRequested()) return;
 
+
+
         while(opModeIsActive()) {
             driveControls();
             driveTelemetry();
@@ -34,8 +36,8 @@ public class MainOpMode extends LinearOpMode {
 //            elevatorManual();
             elevatorTelemetry();
 
-//            grabberControls();
-            grabberManual();
+            grabberControls();
+//            grabberManual();
             grabberTelemetry();
 
             telemetry.update();
@@ -45,9 +47,9 @@ public class MainOpMode extends LinearOpMode {
     private void driveControls() {
         if(driveSubsystem == null) return;
 
-        double x = gamepad1.left_stick_x * 0.5;
-        double y = -gamepad1.left_stick_y * 0.5;
-        double rx = gamepad1.right_stick_x * 0.50;
+        double x = Constants.DriveConstants.DRIVE_SPEED * Math.signum(gamepad1.left_stick_x) * Math.pow(Math.abs(gamepad1.left_stick_x), 2);
+        double y = Constants.DriveConstants.DRIVE_SPEED * Math.signum(-gamepad1.left_stick_y) * Math.pow(Math.abs(gamepad1.left_stick_y), 2);
+        double rx = Constants.DriveConstants.DRIVE_SPEED * Math.signum(gamepad1.right_stick_x) * Math.pow(Math.abs(gamepad1.right_stick_x), 2);
 
         driveSubsystem.driveRobotCentric(x, y, rx);
 
@@ -70,10 +72,14 @@ public class MainOpMode extends LinearOpMode {
 
         double speed = -gamepad2.left_stick_y * Constants.ElevatorConstants.MAX_MOTOR_SPEED;
 
-        if(speed > 0 && elevatorSubsystem.getPosition() > 3000 && !override) {
+        if(speed > 0 && elevatorSubsystem.getPosition() > Constants.ElevatorConstants.kMaxExtensionCounts && !override) {
             speed = 0;
         } else if(speed < 0 && elevatorSubsystem.getPosition() <= 0 && !override) {
             speed = 0;
+        }
+
+        if(override) {
+            speed *= 0.5;
         }
 
         elevatorSubsystem.setSpeed(speed);
@@ -96,24 +102,54 @@ public class MainOpMode extends LinearOpMode {
 
     private void grabberControls() {
         if(grabberSubsystem == null) return;
+
+        if(gamepad2.dpad_up) {
+//            grabberSubsystem.setAngle(grabberSubsystem.getTargetPosition() + 20);
+            grabberSubsystem.setExtendPower(Constants.GrabberConstants.MAX_EXTEND_SPEED);
+//            sleep(150);
+        } else if(gamepad2.dpad_down) {
+//            grabberSubsystem.setAngle(grabberSubsystem.getTargetPosition() - 20);
+            grabberSubsystem.setExtendPower(-Constants.GrabberConstants.MAX_EXTEND_SPEED);
+//            sleep(150);
+        } else {
+            grabberSubsystem.setExtendPower(0);
+        }
+
+        grabberSubsystem.setAngle_raw(
+                -gamepad2.right_stick_y > 0 ?
+                        -gamepad2.right_stick_y * 0.2 :
+                        -gamepad2.right_stick_y * 0.4
+        );
+
+        if(gamepad2.triangle) {
+            grabberSubsystem.setGrabberPosition(Constants.GrabberConstants.GRABBER_CLOSED_POS);
+            sleep(100);
+        } else if(gamepad2.square) {
+            grabberSubsystem.setGrabberPosition(Constants.GrabberConstants.GRABBER_OPEN_POS);
+            sleep(100);
+        }
+
+//        grabberSubsystem.setExtendPower(-gamepad2.right_stick_y * Constants.GrabberConstants.MAX_EXTEND_SPEED);
     }
 
     private void grabberManual() {
         if(grabberSubsystem == null) return;
 
         if(gamepad2.dpad_up) {
-            grabberSubsystem.setAngle(grabberSubsystem.getAngle() + 0.05);
+            grabberSubsystem.setAngle_raw(0.2);
             sleep(100);
         } else if(gamepad2.dpad_down) {
-            grabberSubsystem.setAngle(grabberSubsystem.getAngle() - 0.05);
+            grabberSubsystem.setAngle_raw(-0.2);
             sleep(100);
+        } else {
+            grabberSubsystem.setAngle_raw(0);
         }
 
         if(gamepad2.triangle) {
-            grabberSubsystem.setGrabberPosition(0.7);
+            grabberSubsystem.setGrabberPosition(grabberSubsystem.getGrabberPosition() + 0.05);
             sleep(100);
         } else if(gamepad2.square) {
-            grabberSubsystem.setGrabberPosition(0.35);
+            grabberSubsystem.setGrabberPosition(grabberSubsystem.getGrabberPosition() - 0.05);
             sleep(100);
         }
 
@@ -128,5 +164,6 @@ public class MainOpMode extends LinearOpMode {
 
         telemetry.addData("Grabber Position: ", grabberSubsystem.getGrabberPosition());
         telemetry.addData("Angle Position: ", grabberSubsystem.getAngle());
+        telemetry.addData("Target Angle: ", grabberSubsystem.getTargetPosition());
     }
 }

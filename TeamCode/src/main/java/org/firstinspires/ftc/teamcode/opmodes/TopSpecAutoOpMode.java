@@ -24,7 +24,7 @@ public class TopSpecAutoOpMode extends LinearOpMode {
         elevatorSubsystem.setAutoExtension(2500);
         sleep(100);
 
-        grabberSubsystem.setAngle(0.35);
+//        grabberSubsystem.setAngle(0.35);
         sleep(500);
 
         driveSubsystem.driveRobotCentric(0, 0.25, 0);
