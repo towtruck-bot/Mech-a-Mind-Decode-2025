@@ -13,10 +13,10 @@ public class DriveSubsystem {
     private IMU imu;
 
     public DriveSubsystem(HardwareMap hmap) {
-        frontLeftMotor = hmap.get(DcMotor.class, "frontLeftDrive");
-        frontRightMotor = hmap.get(DcMotor.class, "frontRightDrive");
-        backLeftMotor = hmap.get(DcMotor.class, "backLeftDrive");
-        backRightMotor = hmap.get(DcMotor.class, "backRightDrive");
+        frontLeftMotor = hmap.get(DcMotor.class, "frontLeft");
+        frontRightMotor = hmap.get(DcMotor.class, "frontRight");
+        backLeftMotor = hmap.get(DcMotor.class, "backLeft");
+        backRightMotor = hmap.get(DcMotor.class, "backRight");
 
         frontLeftMotor.setDirection(DcMotorSimple.Direction.REVERSE);
         backLeftMotor.setDirection(DcMotorSimple.Direction.REVERSE);
@@ -36,11 +36,11 @@ public class DriveSubsystem {
     public void driveRobotCentric(double x, double y, double rx) {
         x *= 1.1;
 
-//        double denominator = Math.max(Math.abs(y) + Math.abs(x) + Math.abs(rx), 1);
-        double frontLeftPower = (y + x + rx);
-        double backLeftPower = (y - x + rx);
-        double frontRightPower = (y - x - rx);
-        double backRightPower = (y + x - rx);
+        double denominator = Math.max(Math.abs(y) + Math.abs(x) + Math.abs(rx), 1);
+        double frontLeftPower = (y + x + rx)/denominator;
+        double backLeftPower = (y - x + rx)/denominator;
+        double frontRightPower = (y - x - rx)/denominator;
+        double backRightPower = (y + x - rx)/denominator;
 
         frontLeftMotor.setPower(frontLeftPower);
         backLeftMotor.setPower(backLeftPower);

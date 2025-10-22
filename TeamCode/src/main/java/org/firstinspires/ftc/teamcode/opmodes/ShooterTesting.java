@@ -2,7 +2,7 @@ package org.firstinspires.ftc.teamcode.opmodes;
 
 import com.qualcomm.hardware.rev.RevHubOrientationOnRobot;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
-import com.qualcomm.robotcore.hardware.CRServo;
+import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.IMU;
 
@@ -13,11 +13,20 @@ public class ShooterTesting extends LinearOpMode {
 
     private DcMotor backLeftMotor, backRightMotor, frontLeftMotor, frontRightMotor, intake,shooter;
     private IMU imu;
+    private Servo shooterServo, loadingServo;
 
     double shooterpower = 0.5;
     double shooterangle = 0.8;//Percentage that hood can be shifted to 0% (hood resting at bottom) - 100%
     double shooterintervalms = 1500;//time between shots in ms
-    // PID constants (for heading hold later)
+
+    double loadingMin = 0.2;
+    double loadingMax = 0.8;
+
+    double shooterAngleMin = 0;
+    double shooterAngleMax = 1;
+
+
+    // PID constants (for autotargeting later)
     private double kP = 0.02;
     private double kI = 0.0;
     private double kD = 0.001;
@@ -33,6 +42,10 @@ public class ShooterTesting extends LinearOpMode {
         frontRightMotor = hardwareMap.get(DcMotor.class, "frontRight");
         intake = hardwareMap.get(DcMotor.class, "intakeMotor");
         shooter =hardwareMap.get(DcMotor.class,"shooterMotor");
+        shooterServo = hardwareMap.get(Servo.class, "shooterServo");
+        loadingServo = hardwareMap.get(Servo.class, "loadingServo");
+
+        // Set motor directions
         // Reverse right side motors if needed
         backRightMotor.setDirection(DcMotor.Direction.REVERSE);
         frontRightMotor.setDirection(DcMotor.Direction.REVERSE);
@@ -91,10 +104,16 @@ public class ShooterTesting extends LinearOpMode {
                 intake.setPower(0);   // stop
             }
 
-            if (gamepad1.right_bumper){
+            if(gamepad1.a){
                 shooter.setPower(shooterpower);
-            } else {
+                sleep((long) shooterintervalms);
+                loadingServo.setPosition(loadingMax);
+                sleep(500);
+                loadingServo.setPosition(loadingMin);
+            }
+            if(gamepad1.aWasReleased()){
                 shooter.setPower(0);
+                loadingServo.setPosition(loadingMin);
             }
 
             if (gamepad1.y) {
@@ -106,12 +125,30 @@ public class ShooterTesting extends LinearOpMode {
                 shooterpower -= 0.025;
                 sleep(100);
             }
+
+            if (gamepad1.dpad_up){
+                if(shooterangle < shooterAngleMax) {
+                    shooterangle += 0.025;
+                    sleep(100);
+                    shooterServo.setPosition(shooterangle);
+                }
+            }
+            if (gamepad1.dpad_down){
+                if(shooterangle > shooterAngleMin) {
+                    shooterangle -= 0.025;
+                    sleep(10);
+                    shooterServo.setPosition(shooterangle);
+                }
+            }
+
             // Telemetry for depbugging
             telemetry.addData("FL", frontLeftPower);
             telemetry.addData("FR", frontRightPower);
             telemetry.addData("BL", backLeftPower);
             telemetry.addData("BR", backRightPower);
             telemetry.addData("Shooter power:", shooterpower*100+"%");
+            telemetry.addData("Shooter angle:", shooterangle*100+"%");
+            telemetry.addData("Loading angle:", loadingServo.getPosition());
             telemetry.addData("Heading", getHeading());
             telemetry.update();
         }

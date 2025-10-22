@@ -21,7 +21,7 @@ public class TeleOp extends LinearOpMode {
     private double kP = 0.02;
     private double kI = 0.0;
     private double kD = 0.001;
-    private Servo angleServo;
+    private Servo angleServo, shooterServo;
 
     private double targetHeading = 0; // target heading in degrees
 
@@ -35,8 +35,8 @@ public class TeleOp extends LinearOpMode {
         frontRightMotor = hardwareMap.get(DcMotor.class, "frontRight");
         intake = hardwareMap.get(DcMotor.class, "intakeMotor");
         shooter = hardwareMap.get(DcMotor.class,"shooterMotor");
-        angleServo = hardwareMap.get(Servo.class, "shooterServo");
-
+        angleServo = hardwareMap.get(Servo.class, "angleServo");
+        shooterServo = hardwareMap.get(Servo.class, "shooterServo");
 
 
         // Reverse right side motors if needed
@@ -112,7 +112,7 @@ public class TeleOp extends LinearOpMode {
                 shooterpower -= 0.025;
                 sleep(100);
             }
-            // Telemetry for depbugging
+            // Telemetry for debugging
             telemetry.addData("FL", frontLeftPower);
             telemetry.addData("FR", frontRightPower);
             telemetry.addData("BL", backLeftPower);
