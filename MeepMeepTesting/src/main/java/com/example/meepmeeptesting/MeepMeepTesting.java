@@ -31,7 +31,7 @@ public class MeepMeepTesting {
                 .turnTo(Math.toRadians(270))
                 .strafeTo(new Vector2d(ballstack2,-12))
                 .strafeTo(new Vector2d(12,-60))
-                        .strafeTo(new Vector2d(ballstack2,-50))
+                .strafeTo(new Vector2d(ballstack2,-50))
                 .strafeTo(new Vector2d(shootingx,shootingy))
                 .turnTo(Math.toRadians(225))
                 .turnTo(Math.toRadians(270))

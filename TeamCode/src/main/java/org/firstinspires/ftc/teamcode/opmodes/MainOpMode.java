@@ -76,7 +76,11 @@ MainOpMode extends LinearOpMode {
             }
         }
         private void intakeTelemetry() {
-
+            if (intakeSubsystem == null) {
+                telemetry.addData("Intake Status: ", "Disabled");
+            } else{
+            telemetry.addData("Intake Power: ", intakeSubsystem.getIntakePower());
+            }
         }
 
         private void shooterControls () {

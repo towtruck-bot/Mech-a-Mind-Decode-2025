@@ -15,6 +15,7 @@ import com.acmerobotics.roadrunner.profile.MotionProfileGenerator;
 import com.acmerobotics.roadrunner.profile.MotionState;
 import com.acmerobotics.roadrunner.util.NanoClock;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.util.RobotLog;
@@ -49,6 +50,7 @@ import java.util.List;
  * Pressing B/O (Xbox/PS4) will cede control back to the tuning process.
  */
 @Config
+@Disabled
 @Autonomous(group = "drive")
 public class DriveVelocityPIDTuner extends LinearOpMode {
     public static double DISTANCE = 72; // in
@@ -73,6 +75,11 @@ public class DriveVelocityPIDTuner extends LinearOpMode {
 
         Telemetry telemetry = new MultipleTelemetry(this.telemetry, FtcDashboard.getInstance().getTelemetry());
 
+        telemetry.addLine("This tuner is disabled because it requires DcMotorEx for velocity PID tuning.");
+        telemetry.addLine("Your project's SampleMecanumDrive is configured to use DcMotor.");
+        telemetry.addLine("To use this tuner, you must change SampleMecanumDrive to use DcMotorEx.");
+        telemetry.update();
+
         SampleMecanumDrive drive = new SampleMecanumDrive(hardwareMap);
 
         Mode mode = Mode.TUNING_MODE;
@@ -82,7 +89,7 @@ public class DriveVelocityPIDTuner extends LinearOpMode {
         double lastKd = MOTOR_VELO_PID.d;
         double lastKf = MOTOR_VELO_PID.f;
 
-        drive.setPIDFCoefficients(DcMotor.RunMode.RUN_USING_ENCODER, MOTOR_VELO_PID);
+        // drive.setPIDFCoefficients(DcMotor.RunMode.RUN_USING_ENCODER, MOTOR_VELO_PID);
 
         NanoClock clock = NanoClock.system();
 
@@ -157,7 +164,7 @@ public class DriveVelocityPIDTuner extends LinearOpMode {
 
             if (lastKp != MOTOR_VELO_PID.p || lastKd != MOTOR_VELO_PID.d
                     || lastKi != MOTOR_VELO_PID.i || lastKf != MOTOR_VELO_PID.f) {
-                drive.setPIDFCoefficients(DcMotor.RunMode.RUN_USING_ENCODER, MOTOR_VELO_PID);
+                // drive.setPIDFCoefficients(DcMotor.RunMode.RUN_USING_ENCODER, MOTOR_VELO_PID);
 
                 lastKp = MOTOR_VELO_PID.p;
                 lastKi = MOTOR_VELO_PID.i;
